@@ -1,4 +1,3 @@
-import 'package:dev_garage/features/screenshot/screenshot_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
         useMaterial3: true,
       ),
-      home: const ScreenshotMakerPage(),
+      home: const Scaffold(),
     );
   }
 }

@@ -1,17 +1,16 @@
 name: dev_garage
-description: "A new Flutter project."
+description: "A Dev's Garage"
 publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.5.3
+  sdk: ^3.5.1
 
 dependencies:
   flutter:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  desktop_drop: ^0.5.0
 
 dev_dependencies:
   flutter_test:

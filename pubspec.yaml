@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
+  loon: ^4.0.1
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:

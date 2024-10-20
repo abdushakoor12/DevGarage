@@ -4,6 +4,7 @@ import 'package:dev_garage/main.dart';
 import 'package:dev_garage/utils/string_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'link_manager_notifier.dart';
 
@@ -134,26 +135,34 @@ class LinkManagerScreen extends StatelessWidget {
                               children: [
                                 ...linkNotifier.links.map(
                                   (e) {
-                                    return ShadCard(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            e.title,
-                                            style: ShadTheme.of(context)
-                                                .textTheme
-                                                .large,
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Text(
-                                            e.url.shorten(maxLength: 25),
-                                            overflow: TextOverflow.ellipsis,
-                                            style: ShadTheme.of(context)
-                                                .textTheme
-                                                .small,
-                                          ),
-                                        ],
+                                    return InkWell(
+                                      onTap: () async {
+                                        if (await canLaunchUrl(
+                                            Uri.parse(e.url))) {
+                                          launchUrl(Uri.parse(e.url));
+                                        }
+                                      },
+                                      child: ShadCard(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              e.title,
+                                              style: ShadTheme.of(context)
+                                                  .textTheme
+                                                  .large,
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              e.url.shorten(maxLength: 25),
+                                              overflow: TextOverflow.ellipsis,
+                                              style: ShadTheme.of(context)
+                                                  .textTheme
+                                                  .small,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },

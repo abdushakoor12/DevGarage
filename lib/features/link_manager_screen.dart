@@ -1,6 +1,5 @@
 import 'package:dev_garage/core/db/app_database.dart';
 import 'package:dev_garage/core/locator.dart';
-import 'package:dev_garage/main.dart';
 import 'package:dev_garage/utils/string_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -166,6 +165,10 @@ class _Sidebar extends StatelessWidget {
             Expanded(
               child: Text("Categories", style: ShadTheme.of(context).textTheme.list,),
             ),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {},
+            )
           ],
         )
       ],

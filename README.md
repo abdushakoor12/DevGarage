@@ -3,9 +3,8 @@
 An app for developers that has tools for developers.
 
 # Platforms
-- [ ] MacOS
-- [ ] Windows
-- [x] Linux
+
+Designed for desktop
 
 # Features
 - Link Manager (WIP)

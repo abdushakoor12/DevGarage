@@ -1,5 +1,6 @@
 import 'package:dev_garage/core/db/app_database.dart';
 import 'package:dev_garage/core/locator.dart';
+import 'package:dev_garage/main.dart';
 import 'package:dev_garage/utils/string_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -33,71 +34,93 @@ class LinkManagerScreen extends StatelessWidget {
                       children: [
                         Align(
                           alignment: Alignment.topRight,
-                          child: ShadButton(
-                            icon: Icon(Icons.add),
-                            child: Text("Add Link"),
-                            onPressed: () {
-                              final linkTitleController =
-                                  TextEditingController();
-                              final linkController = TextEditingController();
-                              showShadDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return ShadDialog(
-                                      title: const Text("Add Link"),
-                                      child: ShadForm(
-                                        key: formKey,
-                                        child: Column(
-                                          children: [
-                                            ShadInputFormField(
-                                              controller: linkTitleController,
-                                              validator: (value) {
-                                                if (value.trim().isEmpty) {
-                                                  return "Link title is required";
-                                                }
-                                                return null;
-                                              },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ShadButton(
+                                icon: Icon(
+                                  themeNotifier.value == ThemeMode.dark
+                                      ? Icons.light_mode
+                                      : Icons.dark_mode,
+                                ),
+                                onPressed: () {
+                                  themeNotifier.value =
+                                      themeNotifier.value == ThemeMode.dark
+                                          ? ThemeMode.light
+                                          : ThemeMode.dark;
+                                },
+                              ),
+                              ShadButton(
+                                icon: Icon(Icons.add),
+                                child: Text("Add Link"),
+                                onPressed: () {
+                                  final linkTitleController =
+                                      TextEditingController();
+                                  final linkController =
+                                      TextEditingController();
+                                  showShadDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return ShadDialog(
+                                          title: const Text("Add Link"),
+                                          child: ShadForm(
+                                            key: formKey,
+                                            child: Column(
+                                              children: [
+                                                ShadInputFormField(
+                                                  controller:
+                                                      linkTitleController,
+                                                  validator: (value) {
+                                                    if (value.trim().isEmpty) {
+                                                      return "Link title is required";
+                                                    }
+                                                    return null;
+                                                  },
+                                                ),
+                                                SizedBox(height: 16),
+                                                ShadInputFormField(
+                                                  controller: linkController,
+                                                  validator: (value) {
+                                                    if (value.trim().isEmpty) {
+                                                      return "Link url is required";
+                                                    }
+                                                    return null;
+                                                  },
+                                                ),
+                                                SizedBox(height: 16),
+                                                ShadButton(
+                                                  child: const Text("Add"),
+                                                  onPressed: () {
+                                                    if (formKey.currentState!
+                                                        .validate()) {
+                                                      final database = locator
+                                                          .get<AppDatabase>();
+                                                      final title =
+                                                          linkTitleController
+                                                              .text
+                                                              .trim();
+                                                      final link =
+                                                          linkController.text
+                                                              .trim();
+                                                      database
+                                                          .into(database.links)
+                                                          .insert(LinksCompanion
+                                                              .insert(
+                                                                  title: title,
+                                                                  url: link));
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }
+                                                  },
+                                                ),
+                                              ],
                                             ),
-                                            SizedBox(height: 16),
-                                            ShadInputFormField(
-                                              controller: linkController,
-                                              validator: (value) {
-                                                if (value.trim().isEmpty) {
-                                                  return "Link url is required";
-                                                }
-                                                return null;
-                                              },
-                                            ),
-                                            SizedBox(height: 16),
-                                            ShadButton(
-                                              child: const Text("Add"),
-                                              onPressed: () {
-                                                if (formKey.currentState!
-                                                    .validate()) {
-                                                  final database = locator
-                                                      .get<AppDatabase>();
-                                                  final title =
-                                                      linkTitleController.text
-                                                          .trim();
-                                                  final link = linkController
-                                                      .text
-                                                      .trim();
-                                                  database
-                                                      .into(database.links)
-                                                      .insert(
-                                                          LinksCompanion.insert(
-                                                              title: title,
-                                                              url: link));
-                                                  Navigator.of(context).pop();
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  });
-                            },
+                                          ),
+                                        );
+                                      });
+                                },
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 16),

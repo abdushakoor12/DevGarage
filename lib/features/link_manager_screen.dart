@@ -25,7 +25,7 @@ class LinkManagerScreen extends StatelessWidget {
             height: double.infinity,
             child: Row(
               children: [
-                Expanded(flex: 1, child: _Sidebar()),
+                Expanded(flex: 1, child: _Sidebar(linkNotifier)),
                 VerticalDivider(),
                 Expanded(
                   flex: 4,
@@ -185,7 +185,9 @@ class LinkManagerScreen extends StatelessWidget {
 }
 
 class _Sidebar extends StatelessWidget {
-  const _Sidebar({super.key});
+  final LinkManagerNotifier linkManagerNotifier;
+
+  const _Sidebar(this.linkManagerNotifier);
 
   @override
   Widget build(BuildContext context) {
@@ -195,15 +197,69 @@ class _Sidebar extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: Text("Categories", style: ShadTheme.of(context).textTheme.list,),
+              child: Text(
+                "Categories",
+                style: ShadTheme.of(context).textTheme.list,
+              ),
             ),
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () {
+                showAddCategoryDialog(context);
+              },
             )
           ],
-        )
+        ),
+        ...linkManagerNotifier.categories.map(
+          (e) {
+            return ListTile(
+              title: Text(e.name),
+            );
+          },
+        ),
       ],
     );
   }
+}
+
+void showAddCategoryDialog(BuildContext context) {
+  final categoryNameController = TextEditingController();
+  showShadDialog(
+    context: context,
+    builder: (context) {
+      return ShadDialog(
+        title: const Text("Add Category"),
+        child: ShadForm(
+          key: formKey,
+          child: Column(
+            children: [
+              ShadInputFormField(
+                controller: categoryNameController,
+                validator: (value) {
+                  if (value.trim().isEmpty) {
+                    return "Category name is required";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              ShadButton(
+                child: const Text("Add"),
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    final database = locator.get<AppDatabase>();
+                    final name = categoryNameController.text.trim();
+                    database
+                        .into(database.linkCategories)
+                        .insert(LinkCategoriesCompanion.insert(name: name));
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

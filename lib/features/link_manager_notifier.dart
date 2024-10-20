@@ -8,19 +8,32 @@ class LinkManagerNotifier extends ChangeNotifier {
   final appDatabase = locator.get<AppDatabase>();
 
   List<Link> links = [];
+  List<LinkCategory> categories = [];
 
-  StreamSubscription? _subscription;
+  final List<StreamSubscription> _subscriptions = [];
 
   LinkManagerNotifier() {
-    _subscription = appDatabase.select(appDatabase.links).watch().listen((links) {
-      this.links = links;
-      notifyListeners();
-    });
+    _subscriptions.addAll(
+      [
+        appDatabase.select(appDatabase.links).watch().listen(
+          (links) {
+            this.links = links;
+            notifyListeners();
+          },
+        ),
+        appDatabase.select(appDatabase.linkCategories).watch().listen(
+          (categories) {
+            this.categories = categories;
+            notifyListeners();
+          },
+        ),
+      ],
+    );
   }
 
   @override
   void dispose() {
-    _subscription?.cancel();
+    _subscriptions.forEach((e) => e.cancel());
     super.dispose();
   }
 }

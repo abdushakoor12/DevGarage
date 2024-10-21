@@ -1,37 +1,67 @@
-name: Deploy to GitHub Pages
+name: Deploy WASM to GitHub Pages
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  deploy:
-    runs-on: ubuntu-18.04
+  build-and-deploy:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v1
-      #        with:
-      #          flutter-version: '1.19.x'
-      #          channel: 'beta' # Required for web
-      #
-      #      - name: Enable Flutter Web
-      #        run: flutter config --enable-web
-
-      - name: Download Dependencies
-        run: flutter pub get
-
-      - name: Build
-        run: flutter build web
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/web
-          force_orphan: true
-          user_name: 'github-ci[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Publish to gh-pages'
+          flutter-version: "3.24.2"
+          channel: "stable"
+          architecture: x64
+
+      - name: Get dependencies
+        run: |
+          flutter pub get
+
+      - name: Build WASM
+        run: |
+          flutter build web --wasm --base-href /devgarage/
+
+      - name: Update COOP and COEP headers
+        run: |
+          echo '
+          {
+            "headers": [
+              {
+                "source": "**/*",
+                "headers": [
+                  {
+                    "key": "Cross-Origin-Embedder-Policy",
+                    "value": "credentialless"
+                  },
+                  {
+                    "key": "Cross-Origin-Opener-Policy",
+                    "value": "same-origin"
+                  }
+                ]
+              }
+            ]
+          }
+          ' > build/web/_headers
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'build/web'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

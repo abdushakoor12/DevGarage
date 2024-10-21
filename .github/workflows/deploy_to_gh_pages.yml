@@ -32,7 +32,7 @@ jobs:
 
       - name: Build WASM
         run: |
-          flutter build web --wasm --base-href /devgarage/
+          flutter build web --wasm
 
       - name: Update COOP and COEP headers
         run: |

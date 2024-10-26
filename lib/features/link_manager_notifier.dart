@@ -6,8 +6,18 @@ import 'package:flutter/material.dart';
 
 class LinkManagerNotifier extends ChangeNotifier {
   final appDatabase = locator.get<AppDatabase>();
+  final searchController = TextEditingController();
 
-  List<Link> links = [];
+  String _searchText = "";
+
+  List<Link> _links = [];
+
+  List<Link> get links => _links
+      .where((e) =>
+          e.title.toLowerCase().contains(_searchText.trim().toLowerCase()) ||
+          e.url.toLowerCase().contains(_searchText.trim().toLowerCase()))
+      .toList();
+
   List<LinkCategory> categories = [];
 
   final List<StreamSubscription> _subscriptions = [];
@@ -17,7 +27,7 @@ class LinkManagerNotifier extends ChangeNotifier {
       [
         appDatabase.select(appDatabase.links).watch().listen(
           (links) {
-            this.links = links;
+            _links = links;
             notifyListeners();
           },
         ),
@@ -29,11 +39,17 @@ class LinkManagerNotifier extends ChangeNotifier {
         ),
       ],
     );
+
+    searchController.addListener(() {
+      _searchText = searchController.text;
+      notifyListeners();
+    });
   }
 
   @override
   void dispose() {
     _subscriptions.forEach((e) => e.cancel());
+    searchController.dispose();
     super.dispose();
   }
 }

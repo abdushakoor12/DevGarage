@@ -4,8 +4,8 @@ import 'package:dev_garage/features/link_manager_notifier.dart';
 import 'package:flutter/material.dart';
 
 final locator = ServiceLocator()
-  ..addLazy<AppDatabase>(() => AppDatabase())
-  ..addLazy<LinkManagerNotifier>(() => LinkManagerNotifier());
+  ..add<AppDatabase>(() => AppDatabase())
+  ..add<LinkManagerNotifier>(() => LinkManagerNotifier());
 
 class ServiceLocator {
   static final ServiceLocator _instance = ServiceLocator._internal();
@@ -18,6 +18,7 @@ class ServiceLocator {
 
   final Map<Type, dynamic> _services = {};
   final Map<Type, Function> _lazyInitializers = {};
+  final Map<Type, Function> _notifiers = {};
 
   @visibleForTesting
   Map<Type, dynamic> get services => _services;
@@ -25,11 +26,7 @@ class ServiceLocator {
   @visibleForTesting
   Map<Type, Function> get lazyInitializers => _lazyInitializers;
 
-  void add<T>(T service) {
-    _services[T] = service;
-  }
-
-  void addLazy<T>(Function() lazyService) {
+  void add<T>(Function() lazyService) {
     _lazyInitializers[T] = lazyService;
   }
 
@@ -46,11 +43,7 @@ class ServiceLocator {
     throw Exception('Service $T not found');
   }
 
-  void override<T>(T service) {
-    _services[T] = service;
-  }
-
-  void overrideLazily<T>(Function() lazyService) {
+  void override<T>(Function() lazyService) {
     if(_services.containsKey(T)) {
       _services.remove(T);
     }

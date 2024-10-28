@@ -15,7 +15,7 @@ class LinkManagerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final linkNotifier = locator.get<LinkManagerNotifier>();
+    final linkNotifier = Locator().get<LinkManagerNotifier>();
     return ListenableBuilder(
       listenable: linkNotifier,
       builder: (context, child) {
@@ -95,7 +95,7 @@ class LinkManagerScreen extends StatelessWidget {
                                                 onPressed: () {
                                                   if (formKey.currentState!
                                                       .validate()) {
-                                                    final database = locator
+                                                    final database = Locator()
                                                         .get<AppDatabase>();
                                                     final title =
                                                         linkTitleController.text
@@ -245,7 +245,7 @@ void showAddCategoryDialog(BuildContext context) {
                 child: const Text("Add"),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    final database = locator.get<AppDatabase>();
+                    final database = Locator().get<AppDatabase>();
                     final name = categoryNameController.text.trim();
                     database
                         .into(database.linkCategories)

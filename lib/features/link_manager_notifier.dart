@@ -5,7 +5,7 @@ import 'package:dev_garage/core/locator.dart';
 import 'package:flutter/material.dart';
 
 class LinkManagerNotifier extends ChangeNotifier {
-  final appDatabase = locator.get<AppDatabase>();
+  final appDatabase = Locator().get<AppDatabase>();
   final searchController = TextEditingController();
 
   String _searchText = "";

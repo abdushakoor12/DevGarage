@@ -1,10 +1,4 @@
-import 'package:dev_garage/core/db/app_database.dart';
-import 'package:dev_garage/features/link_manager_notifier.dart';
-import 'package:flutter/material.dart';
-
-final locator = Locator()
-  ..add<AppDatabase>(() => AppDatabase())
-  ..add<LinkManagerNotifier>(() => LinkManagerNotifier());
+import 'package:flutter/foundation.dart';
 
 class Locator {
   static final Locator instance = Locator._internal();

@@ -1,24 +1,22 @@
-
 import 'package:dev_garage/core/db/app_database.dart';
 import 'package:dev_garage/features/link_manager_notifier.dart';
 import 'package:flutter/material.dart';
 
-final locator = ServiceLocator()
+final locator = Locator()
   ..add<AppDatabase>(() => AppDatabase())
   ..add<LinkManagerNotifier>(() => LinkManagerNotifier());
 
-class ServiceLocator {
-  static final ServiceLocator _instance = ServiceLocator._internal();
+class Locator {
+  static final Locator instance = Locator._internal();
 
-  ServiceLocator._internal();
+  Locator._internal();
 
-  factory ServiceLocator() {
-    return _instance;
+  factory Locator() {
+    return instance;
   }
 
   final Map<Type, dynamic> _services = {};
   final Map<Type, Function> _lazyInitializers = {};
-  final Map<Type, Function> _notifiers = {};
 
   @visibleForTesting
   Map<Type, dynamic> get services => _services;

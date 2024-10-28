@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class Locator {
   static final Locator instance = Locator._internal();
 
@@ -11,12 +9,6 @@ class Locator {
 
   final Map<Type, dynamic> _services = {};
   final Map<Type, Function> _lazyInitializers = {};
-
-  @visibleForTesting
-  Map<Type, dynamic> get services => _services;
-
-  @visibleForTesting
-  Map<Type, Function> get lazyInitializers => _lazyInitializers;
 
   void add<T>(Function() lazyService) {
     _lazyInitializers[T] = lazyService;

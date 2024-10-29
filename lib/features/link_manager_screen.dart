@@ -71,6 +71,7 @@ class LinkManagerScreen extends StatelessWidget {
                                           child: Column(
                                             children: [
                                               ShadInputFormField(
+                                                placeholder: Text("Title"),
                                                 controller: linkTitleController,
                                                 validator: (value) {
                                                   if (value.trim().isEmpty) {
@@ -81,6 +82,7 @@ class LinkManagerScreen extends StatelessWidget {
                                               ),
                                               SizedBox(height: 16),
                                               ShadInputFormField(
+                                                placeholder: Text("URL"),
                                                 controller: linkController,
                                                 validator: (value) {
                                                   if (value.trim().isEmpty) {
@@ -232,6 +234,7 @@ void showAddCategoryDialog(BuildContext context) {
           child: Column(
             children: [
               ShadInputFormField(
+                placeholder: Text("Category name"),
                 controller: categoryNameController,
                 validator: (value) {
                   if (value.trim().isEmpty) {

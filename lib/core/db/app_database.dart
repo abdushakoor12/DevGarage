@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -63,7 +64,15 @@ class AppDatabase extends _$AppDatabase {
   // After generating code, this class needs to define a schemaVersion getter
   // and a constructor telling drift where the database should be stored.
   // These are described in the getting started guide: https://drift.simonbinder.eu/getting-started/#open
-  AppDatabase() : super(_openConnection());
+  AppDatabase._(QueryExecutor q) : super(q);
+
+  factory AppDatabase() {
+    return AppDatabase._(_openConnection());
+  }
+
+  factory AppDatabase.memory() {
+    return AppDatabase._(NativeDatabase.memory());
+  }
 
   @override
   int get schemaVersion => 1;

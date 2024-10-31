@@ -5,26 +5,47 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:dev_garage/core/db/app_database.dart';
+import 'package:dev_garage/core/locator.dart';
+import 'package:dev_garage/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:dev_garage/main.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  late AppDatabase db;
+
+  setUpAll(() async {
+    setupDependencies();
+    db = AppDatabase.memory();
+    Locator.instance.override<AppDatabase>(() => db);
+  });
+
+  tearDownAll(() async {
+    await db.close();
+  });
+
+  testWidgets('Notes get added into database', (WidgetTester tester) async {
+    const testTitle = 'Test Title';
+    const testUrl = 'https://www.google.com';
+
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.tap(find.text("Add Link"));
+    await tester.pumpAndSettle();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // verify that a dialog is shown
+    expect(find.byType(ShadInputFormField), findsAtLeastNWidgets(2));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // enter title and url
+    await tester.enterText(find.byKey(Key("link_title_field")), testTitle);
+    await tester.enterText(find.byKey(Key("link_url_field")), testUrl);
+    await tester.tap(find.byKey(Key("add_link_button")));
+    await tester.pumpAndSettle();
+
+    expect(find.text(testTitle), findsOneWidget);
+    expect(find.text(testUrl), findsOneWidget);
   });
 }

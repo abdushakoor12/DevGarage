@@ -71,6 +71,7 @@ class LinkManagerScreen extends StatelessWidget {
                                           child: Column(
                                             children: [
                                               ShadInputFormField(
+                                                key: Key("link_title_field"),
                                                 placeholder: Text("Title"),
                                                 controller: linkTitleController,
                                                 validator: (value) {
@@ -82,6 +83,7 @@ class LinkManagerScreen extends StatelessWidget {
                                               ),
                                               SizedBox(height: 16),
                                               ShadInputFormField(
+                                                key: Key("link_url_field"),
                                                 placeholder: Text("URL"),
                                                 controller: linkController,
                                                 validator: (value) {
@@ -93,6 +95,7 @@ class LinkManagerScreen extends StatelessWidget {
                                               ),
                                               SizedBox(height: 16),
                                               ShadButton(
+                                                key: Key("add_link_button"),
                                                 child: const Text("Add"),
                                                 onPressed: () {
                                                   if (formKey.currentState!

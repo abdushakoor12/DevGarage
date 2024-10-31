@@ -1,4 +1,4 @@
-import 'package:dev_garage/features/link_manager_screen.dart';
+import 'package:dev_garage/features/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -28,14 +28,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: themeNotifier,
-        builder: (context, themeMode, child) {
-          return ShadApp.material(
-            title: 'Dev Garage',
-            themeMode: themeMode,
-            debugShowCheckedModeBanner: false,
-            home: LinkManagerScreen(),
-          );
-        });
+      valueListenable: themeNotifier,
+      builder: (context, themeMode, child) {
+        return ShadApp.material(
+          title: 'Dev Garage',
+          themeMode: themeMode,
+          debugShowCheckedModeBanner: false,
+          home: HomeScreen(),
+        );
+      },
+    );
   }
 }

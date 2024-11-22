@@ -20,6 +20,7 @@ class LinkManagerScreen extends StatelessWidget {
       listenable: linkNotifier,
       builder: (context, child) {
         return Scaffold(
+          appBar: AppBar(),
           body: SizedBox(
             width: double.infinity,
             height: double.infinity,

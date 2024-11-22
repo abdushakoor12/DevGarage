@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
               },
               child: ShadCard(
                 title: Text("JSON Viewer"),
-                description: Text("View JSON"),
+                description: Text("View JSON (Under construction)"),
               ),
             ),
           ],

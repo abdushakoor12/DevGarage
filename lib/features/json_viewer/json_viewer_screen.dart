@@ -10,7 +10,9 @@ class JsonViewerScreen extends StatefulWidget {
 }
 
 class _JsonViewerScreenState extends State<JsonViewerScreen> {
-  late final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller = TextEditingController(
+    text: _testJson,
+  );
 
   JsonObject? jsonObject;
 
@@ -56,12 +58,55 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
             maxSize: .8,
             child: jsonObject == null
                 ? const Center(child: Text('No JSON'))
-                : Center(
-                    child: Text(jsonObject!.fromPath(r'$').toString()),
-                  ),
+                : _JsonViewerView(jsonObject: jsonObject!),
           ),
         ],
       ),
     );
   }
 }
+
+class _JsonViewerView extends StatefulWidget {
+  final JsonObject jsonObject;
+
+  const _JsonViewerView({super.key, required this.jsonObject});
+
+  @override
+  State<_JsonViewerView> createState() => _JsonViewerViewState();
+}
+
+class _JsonViewerViewState extends State<_JsonViewerView> {
+  late final keys = widget.jsonObject.fields;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: double.infinity,
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var key in keys)
+              Text("$key<${widget.jsonObject.getValue(key).runtimeType}>"),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+const _testJson = r'''
+{
+    "userId": 1,
+    "id": 1,
+    "title": "delectus aut autem",
+    "completed": false
+  }
+  ''';

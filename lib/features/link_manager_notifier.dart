@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:dev_garage/core/db/app_database.dart';
-import 'package:dev_garage/core/locator.dart';
 import 'package:flutter/material.dart';
 
 class LinkManagerNotifier extends ChangeNotifier {
-  final appDatabase = Locator().get<AppDatabase>();
+  final AppDatabase appDatabase;
+
   final searchController = TextEditingController();
 
   String _searchText = "";
@@ -22,7 +22,7 @@ class LinkManagerNotifier extends ChangeNotifier {
 
   final List<StreamSubscription> _subscriptions = [];
 
-  LinkManagerNotifier() {
+  LinkManagerNotifier(this.appDatabase) {
     _subscriptions.addAll(
       [
         appDatabase.select(appDatabase.links).watch().listen(

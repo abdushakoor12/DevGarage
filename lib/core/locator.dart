@@ -1,12 +1,4 @@
 class Locator {
-  static final Locator instance = Locator._internal();
-
-  Locator._internal();
-
-  factory Locator() {
-    return instance;
-  }
-
   final Map<Type, dynamic> _services = {};
   final Map<Type, Function> _lazyInitializers = {};
 

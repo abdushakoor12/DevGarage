@@ -14,11 +14,12 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() {
   late AppDatabase db;
+  late Locator locator;
 
   setUpAll(() async {
-    setupDependencies();
+    locator = getLocator();
     db = AppDatabase.memory();
-    Locator.instance.override<AppDatabase>(() => db);
+    locator.override<AppDatabase>(() => db);
   });
 
   tearDownAll(() async {
@@ -30,7 +31,7 @@ void main() {
     const testUrl = 'https://www.google.com';
 
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp(locator: locator));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text("Add Link"));

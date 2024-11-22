@@ -1,5 +1,6 @@
 import 'package:dev_garage/core/db/app_database.dart';
 import 'package:dev_garage/core/locator.dart';
+import 'package:dev_garage/core/locator_root.dart';
 import 'package:dev_garage/main.dart';
 import 'package:dev_garage/utils/string_extensions.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +11,24 @@ import 'link_manager_notifier.dart';
 
 final formKey = GlobalKey<ShadFormState>();
 
-class LinkManagerScreen extends StatelessWidget {
+class LinkManagerScreen extends StatefulWidget {
   const LinkManagerScreen({super.key});
 
   @override
+  State<LinkManagerScreen> createState() => _LinkManagerScreenState();
+}
+
+class _LinkManagerScreenState extends State<LinkManagerScreen> {
+  late final linkNotifier = LinkManagerNotifier(context.get());
+
+  @override
+  void dispose() {
+    linkNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final linkNotifier = Locator().get<LinkManagerNotifier>();
     return ListenableBuilder(
       listenable: linkNotifier,
       builder: (context, child) {

@@ -1,4 +1,4 @@
-import 'package:dev_garage/features/link_manager_screen.dart';
+import 'package:dev_garage/features/link_manager/link_manager_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 

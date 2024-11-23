@@ -114,7 +114,7 @@ class _LinkManagerScreenState extends State<LinkManagerScreen> {
                                                 onPressed: () {
                                                   if (formKey.currentState!
                                                       .validate()) {
-                                                    final database = Locator()
+                                                    final database = context
                                                         .get<AppDatabase>();
                                                     final title =
                                                         linkTitleController.text

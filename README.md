@@ -8,4 +8,5 @@ Designed for desktop
 
 # Features
 - Link Manager (WIP)
+- Password Generator
 - More....

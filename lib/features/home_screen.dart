@@ -1,4 +1,5 @@
 import 'package:dev_garage/features/link_manager/link_manager_screen.dart';
+import 'package:dev_garage/features/passwod_generator/password_generator_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -35,6 +36,17 @@ class HomeScreen extends StatelessWidget {
               child: ShadCard(
                 title: Text("JSON Viewer"),
                 description: Text("View JSON (Under construction)"),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const PasswordGeneratorScreen(),
+                ));
+              },
+              child: ShadCard(
+                title: Text("Password Generator"),
+                description: Text("Generate passwords"),
               ),
             ),
           ],

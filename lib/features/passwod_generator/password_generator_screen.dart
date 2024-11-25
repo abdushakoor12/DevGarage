@@ -61,13 +61,28 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center),
-                  trailing: IconButton(
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: password));
-                    },
-                    icon: const Icon(Icons.copy),
-                  ),
                 ),
+                Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: password));
+                      },
+                      icon: const Icon(Icons.copy),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _setPassword();
+                        });
+                      },
+                      icon: const Icon(Icons.refresh),
+                    ),
+                  ],
+                ),
+                Divider(),
                 Row(
                   children: [
                     Text(kMinPasswordLength.toString()),

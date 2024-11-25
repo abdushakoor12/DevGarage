@@ -1,7 +1,6 @@
 import 'package:dev_garage/core/db/app_database.dart';
 import 'package:dev_garage/core/locator.dart';
 import 'package:dev_garage/core/locator_root.dart';
-import 'package:dev_garage/main.dart';
 import 'package:dev_garage/utils/string_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -54,19 +53,6 @@ class _LinkManagerScreenState extends State<LinkManagerScreen> {
                                 controller: linkNotifier.searchController,
                                 placeholder: Text("Search..."),
                               ),
-                            ),
-                            ShadButton(
-                              icon: Icon(
-                                themeNotifier.value == ThemeMode.dark
-                                    ? Icons.light_mode
-                                    : Icons.dark_mode,
-                              ),
-                              onPressed: () {
-                                themeNotifier.value =
-                                    themeNotifier.value == ThemeMode.dark
-                                        ? ThemeMode.light
-                                        : ThemeMode.dark;
-                              },
                             ),
                             ShadButton(
                               icon: Icon(Icons.add),

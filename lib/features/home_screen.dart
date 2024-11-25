@@ -1,5 +1,6 @@
 import 'package:dev_garage/features/link_manager/link_manager_screen.dart';
 import 'package:dev_garage/features/passwod_generator/password_generator_screen.dart';
+import 'package:dev_garage/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -11,12 +12,28 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          ShadButton(
+            icon: Icon(
+              themeNotifier.value == ThemeMode.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
+            onPressed: () {
+              themeNotifier.value = themeNotifier.value == ThemeMode.dark
+                  ? ThemeMode.light
+                  : ThemeMode.dark;
+            },
+          ),
+        ],
+      ),
       body: Center(
         child: Wrap(
           spacing: 16,
           runSpacing: 16,
           children: [
-            GestureDetector(
+            InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const LinkManagerScreen(),
@@ -27,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                 description: Text("Manage your links"),
               ),
             ),
-            GestureDetector(
+            InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const JsonViewerScreen(),
@@ -38,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                 description: Text("View JSON (Under construction)"),
               ),
             ),
-            GestureDetector(
+            InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const PasswordGeneratorScreen(),

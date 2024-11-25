@@ -14,17 +14,20 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          ShadButton(
-            icon: Icon(
-              themeNotifier.value == ThemeMode.dark
-                  ? Icons.light_mode
-                  : Icons.dark_mode,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ShadButton(
+              icon: Icon(
+                themeNotifier.value == ThemeMode.dark
+                    ? Icons.light_mode
+                    : Icons.dark_mode,
+              ),
+              onPressed: () {
+                themeNotifier.value = themeNotifier.value == ThemeMode.dark
+                    ? ThemeMode.light
+                    : ThemeMode.dark;
+              },
             ),
-            onPressed: () {
-              themeNotifier.value = themeNotifier.value == ThemeMode.dark
-                  ? ThemeMode.light
-                  : ThemeMode.dark;
-            },
           ),
         ],
       ),

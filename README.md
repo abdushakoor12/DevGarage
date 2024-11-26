@@ -1,6 +1,6 @@
 # Dev Garage
 
-An app for developers that has tools for developers.
+An App with some tools.
 
 # Platforms
 

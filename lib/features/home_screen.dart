@@ -13,6 +13,15 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          ShadButton(
+            icon: Icon(Icons.info),
+            onPressed: () {
+              showAboutDialog(
+                context: context,
+                applicationName: "Dev Garage",
+              );
+            },
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ShadButton(
@@ -43,7 +52,7 @@ class HomeScreen extends StatelessWidget {
               },
               child: ShadCard(
                 title: Text("JSON Viewer"),
-                description: Text("View JSON (Under construction)"),
+                description: Text("View JSON"),
               ),
             ),
             InkWell(

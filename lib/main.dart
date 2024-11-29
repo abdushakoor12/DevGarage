@@ -3,7 +3,6 @@ import 'package:dev_garage/features/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import 'core/db/app_database.dart';
 import 'core/locator.dart';
 
 final themeNotifier = ValueNotifier(ThemeMode.light);
@@ -19,7 +18,7 @@ Future<void> main() async {
 }
 
 Locator getLocator() {
-  return Locator()..add<AppDatabase>(() => AppDatabase());
+  return Locator();
 }
 
 class MyApp extends StatelessWidget {

@@ -1,4 +1,3 @@
-import 'package:dev_garage/features/link_manager/link_manager_screen.dart';
 import 'package:dev_garage/features/passwod_generator/password_generator_screen.dart';
 import 'package:dev_garage/main.dart';
 import 'package:flutter/material.dart';
@@ -36,17 +35,6 @@ class HomeScreen extends StatelessWidget {
           spacing: 16,
           runSpacing: 16,
           children: [
-            InkWell(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const LinkManagerScreen(),
-                ));
-              },
-              child: ShadCard(
-                title: Text("Link Manager"),
-                description: Text("Manage your links"),
-              ),
-            ),
             InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(

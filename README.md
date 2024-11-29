@@ -1,12 +1,11 @@
 # Dev Garage
 
-An App with some tools.
+An App with some tools, uses [Flutter Shadcn UI](https://flutter-shadcn-ui.mariuti.com/).
 
 # Platforms
 
 Designed for desktop
 
 # Features
-- Link Manager (WIP)
 - Password Generator
 - More....

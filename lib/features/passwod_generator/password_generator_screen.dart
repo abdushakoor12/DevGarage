@@ -87,8 +87,8 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
                   children: [
                     Text(kMinPasswordLength.toString()),
                     Expanded(
-                      child: Slider(
-                        value: length.toDouble(),
+                      child: ShadSlider(
+                        initialValue: length.toDouble(),
                         min: kMinPasswordLength.toDouble(),
                         max: kMaxPasswordLength.toDouble(),
                         onChanged: (value) {

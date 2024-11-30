@@ -102,8 +102,8 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
                     Text(kMaxPasswordLength.toString()),
                   ],
                 ),
-                SwitchListTile(
-                  title: const Text("Use Uppercase Letters"),
+                const SizedBox(height: 16),
+                ShadSwitch(
                   value: useUpperCase,
                   onChanged: (value) {
                     setState(() {
@@ -111,19 +111,9 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
                       _setPassword();
                     });
                   },
+                  label: Text("Use Uppercase Letters"),
                 ),
-                SwitchListTile(
-                  title: const Text("Use Lowercase Letters"),
-                  value: useLowerCase,
-                  onChanged: (value) {
-                    setState(() {
-                      useLowerCase = value;
-                      _setPassword();
-                    });
-                  },
-                ),
-                SwitchListTile(
-                  title: const Text("Use Numbers"),
+                ShadSwitch(
                   value: useNumber,
                   onChanged: (value) {
                     setState(() {
@@ -131,9 +121,9 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
                       _setPassword();
                     });
                   },
+                  label: Text("Use Numbers"),
                 ),
-                SwitchListTile(
-                  title: const Text("Use Special Characters"),
+                ShadSwitch(
                   value: useSpecialCharacter,
                   onChanged: (value) {
                     setState(() {
@@ -141,6 +131,7 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
                       _setPassword();
                     });
                   },
+                  label: Text("Use Special Characters"),
                 ),
               ],
             ),

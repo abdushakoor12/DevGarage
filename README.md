@@ -8,4 +8,5 @@ Designed for desktop
 
 # Features
 - Password Generator
-- More....
+- Json Viewer
+- More to come....

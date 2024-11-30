@@ -12,14 +12,20 @@ class JsonViewerScreen extends StatefulWidget {
 class _JsonViewerScreenState extends State<JsonViewerScreen> {
   late final TextEditingController _controller = TextEditingController();
 
-  JsonObject? jsonObject;
+  // should be jsonObject or jsonArray
+  JsonValue? rootValue;
 
   void _convert() {
     try {
-      jsonObject = jsonValueDecode(_controller.text) as JsonObject;
+      final parsed = jsonValueDecode(_controller.text);
+      if(parsed is JsonObject || parsed is JsonArray) {
+        rootValue = parsed;
+      } else {
+        rootValue = null;
+      }
       setState(() {});
     } catch (e) {
-      jsonObject = null;
+      rootValue = null;
       setState(() {});
     }
   }
@@ -60,9 +66,9 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
             defaultSize: .5,
             minSize: .2,
             maxSize: .8,
-            child: jsonObject == null
+            child: rootValue == null
                 ? const Center(child: Text('No JSON'))
-                : _JsonViewerView(jsonObject: jsonObject!),
+                : _JsonViewerView(rootValue: rootValue!),
           ),
         ],
       ),
@@ -71,17 +77,15 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
 }
 
 class _JsonViewerView extends StatefulWidget {
-  final JsonObject jsonObject;
+  final JsonValue rootValue;
 
-  const _JsonViewerView({super.key, required this.jsonObject});
+  const _JsonViewerView({required this.rootValue});
 
   @override
   State<_JsonViewerView> createState() => _JsonViewerViewState();
 }
 
 class _JsonViewerViewState extends State<_JsonViewerView> {
-  late final keys = widget.jsonObject.fields;
-
   @override
   void initState() {
     super.initState();
@@ -89,6 +93,8 @@ class _JsonViewerViewState extends State<_JsonViewerView> {
 
   @override
   Widget build(BuildContext context) {
+    assert(widget.rootValue is JsonObject || widget.rootValue is JsonArray);
+    final value = widget.rootValue;
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
@@ -97,11 +103,18 @@ class _JsonViewerViewState extends State<_JsonViewerView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            for (var key in keys)
-              _JsonValueView(
-                jsonValue: widget.jsonObject.getValue(key),
-                name: key,
-              ),
+            if (value is JsonObject)
+              for (var key in value.fields)
+                _JsonValueView(
+                  jsonValue: widget.rootValue.getValue(key),
+                  name: key,
+                ),
+            if (value is JsonArray)
+              for (var i = 0; i < value.arrayValue!.length; i++)
+                _JsonValueView(
+                  jsonValue: widget.rootValue.arrayValue![i],
+                  name: i.toString(),
+                ),
           ],
         ),
       ),

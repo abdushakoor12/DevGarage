@@ -18,7 +18,7 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
   void _convert() {
     try {
       final parsed = jsonValueDecode(_controller.text);
-      if(parsed is JsonObject || parsed is JsonArray) {
+      if (parsed is JsonObject || parsed is JsonArray) {
         rootValue = parsed;
       } else {
         rootValue = null;
@@ -66,9 +66,23 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
             defaultSize: .5,
             minSize: .2,
             maxSize: .8,
-            child: rootValue == null
-                ? const Center(child: Text('No JSON'))
-                : _JsonViewerView(rootValue: rootValue!),
+            child: SizedBox(
+              height: double.infinity,
+              width: double.infinity,
+              child: rootValue == null
+                  ? const Center(child: Text('No JSON'))
+                  : SingleChildScrollView(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _JsonViewerView(rootValue: rootValue!),
+                          ],
+                        ),
+                      ),
+                    ),
+            ),
           ),
         ],
       ),
@@ -95,28 +109,24 @@ class _JsonViewerViewState extends State<_JsonViewerView> {
   Widget build(BuildContext context) {
     assert(widget.rootValue is JsonObject || widget.rootValue is JsonArray);
     final value = widget.rootValue;
-    return SizedBox(
-      width: double.infinity,
-      height: double.infinity,
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (value is JsonObject)
-              for (var key in value.fields)
-                _JsonValueView(
-                  jsonValue: widget.rootValue.getValue(key),
-                  name: key,
-                ),
-            if (value is JsonArray)
-              for (var i = 0; i < value.arrayValue!.length; i++)
-                _JsonValueView(
-                  jsonValue: widget.rootValue.arrayValue![i],
-                  name: i.toString(),
-                ),
-          ],
-        ),
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (value is JsonObject)
+            for (var key in value.fields)
+              _JsonValueView(
+                jsonValue: widget.rootValue.getValue(key),
+                name: key,
+              ),
+          if (value is JsonArray)
+            for (var i = 0; i < value.arrayValue!.length; i++)
+              _JsonValueView(
+                jsonValue: widget.rootValue.arrayValue![i],
+                name: i.toString(),
+              ),
+        ],
       ),
     );
   }

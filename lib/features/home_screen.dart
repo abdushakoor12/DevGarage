@@ -1,5 +1,6 @@
+import 'package:dev_garage/core/locator_root.dart';
+import 'package:dev_garage/core/theme_notifier.dart';
 import 'package:dev_garage/features/passwod_generator/password_generator_screen.dart';
-import 'package:dev_garage/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -10,6 +11,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.get<ThemeNotifier>().value;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -23,20 +25,28 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ShadButton(
-              icon: Icon(
-                themeNotifier.value == ThemeMode.dark
-                    ? Icons.light_mode
-                    : Icons.dark_mode,
-              ),
-              onPressed: () {
-                themeNotifier.value = themeNotifier.value == ThemeMode.dark
-                    ? ThemeMode.light
-                    : ThemeMode.dark;
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+            ),
+            child: SegmentedButton(
+              segments: ThemeMode.values
+                  .map((e) => ButtonSegment(
+                        value: e,
+                        label: Icon(
+                          switch (e) {
+                            ThemeMode.light => Icons.light_mode,
+                            ThemeMode.dark => Icons.dark_mode,
+                            ThemeMode.system => Icons.brightness_auto,
+                          },
+                        ),
+                      ))
+                  .toList(),
+              selected: {themeMode},
+              onSelectionChanged: (value) {
+                context.get<ThemeNotifier>().theme = value.first;
               },
             ),
-          ),
+          )
         ],
       ),
       body: Center(

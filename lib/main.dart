@@ -1,24 +1,24 @@
+import 'dart:async';
+
 import 'package:dev_garage/core/locator_root.dart';
+import 'package:dev_garage/core/theme_notifier.dart';
 import 'package:dev_garage/features/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/locator.dart';
-
-final themeNotifier = ValueNotifier(ThemeMode.light);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final locator = getLocator();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final locator = Locator();
+  locator.add<ThemeNotifier>(() => ThemeNotifier(prefs));
 
   runApp(MyApp(
     locator: locator,
   ));
-}
-
-Locator getLocator() {
-  return Locator();
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
     return LocatorRoot(
       locator: locator,
       child: ValueListenableBuilder(
-        valueListenable: themeNotifier,
+        valueListenable: locator.get<ThemeNotifier>(),
         builder: (context, themeMode, child) {
           return ShadApp.material(
             title: 'Dev Garage',

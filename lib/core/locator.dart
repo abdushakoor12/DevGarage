@@ -16,7 +16,7 @@ class Locator {
       return _services[T] as T;
     }
 
-    throw Exception('Service $T not found');
+    throw Exception('Service $T not found, available service ${_services.keys}');
   }
 
   void override<T>(Function() lazyService) {

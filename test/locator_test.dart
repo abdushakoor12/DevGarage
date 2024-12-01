@@ -1,4 +1,6 @@
 import 'package:dev_garage/core/locator.dart';
+import 'package:dev_garage/core/locator_root.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class TestService {
@@ -86,6 +88,29 @@ void main() {
         () => locator.get<TestServiceB>(),
         throwsA(isA<Exception>()),
       );
+    });
+  });
+
+  group("Locator Root Tests", () {
+    testWidgets(
+        "should register and retrieve a service via context also for LocatorRoot inherited widget",
+        (tester) async {
+      final locator = Locator();
+      locator.add<String>(() => "Injected Text");
+
+      await tester.pumpWidget(LocatorRoot(
+        locator: locator,
+        child: MaterialApp(
+          home: Scaffold(
+            body: Builder(builder: (context) {
+              return Text(context.get<String>());
+            }),
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      expect(find.text("Injected Text"), findsOneWidget);
     });
   });
 }

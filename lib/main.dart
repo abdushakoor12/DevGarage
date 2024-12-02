@@ -40,10 +40,18 @@ class _MyAppState extends State<MyApp> {
   final routerDelegate = BeamerDelegate(
     locationBuilder: RoutesLocationBuilder(
       routes: {
-        '/': (context, state, data) => HomeScreen(),
-        '/json_viewer': (context, state, data) => JsonViewerScreen(),
-        '/password_generator': (context, state, data) =>
-            PasswordGeneratorScreen(),
+        '/': (context, state, data) => BeamPage(
+              title: 'Dev Garage',
+              child: HomeScreen(),
+            ),
+        '/json_viewer': (context, state, data) => BeamPage(
+              title: 'JSON Viewer',
+              child: JsonViewerScreen(),
+            ),
+        '/password_generator': (context, state, data) => BeamPage(
+              title: 'Password Generator',
+              child: PasswordGeneratorScreen(),
+            ),
       },
     ).call,
   );

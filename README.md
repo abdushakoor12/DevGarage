@@ -1,12 +1,18 @@
 # Dev Garage
 
-An App with some tools, uses [Flutter Shadcn UI](https://flutter-shadcn-ui.mariuti.com/).
+Utility tools
 
-# Platforms
+### Stack
+
+- Design => Shadcn [Flutter Shadcn UI](https://flutter-shadcn-ui.mariuti.com/).
+- Navigation => Beamer [Beamer](https://pub.dev/packages/beamer)
+
+### Platforms
 
 Designed for desktop
 
-# Features
+### Features
+
 - Password Generator
 - Json Viewer
 - More to come....

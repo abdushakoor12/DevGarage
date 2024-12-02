@@ -1,10 +1,8 @@
+import 'package:beamer/beamer.dart';
 import 'package:dev_garage/core/locator_root.dart';
 import 'package:dev_garage/core/theme_notifier.dart';
-import 'package:dev_garage/features/passwod_generator/password_generator_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-
-import 'json_viewer/json_viewer_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -56,9 +54,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const JsonViewerScreen(),
-                ));
+                context.beamToNamed('/json_viewer');
               },
               child: ShadCard(
                 title: Text("JSON Viewer"),
@@ -67,9 +63,7 @@ class HomeScreen extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const PasswordGeneratorScreen(),
-                ));
+                context.beamToNamed('/password_generator');
               },
               child: ShadCard(
                 title: Text("Password Generator"),

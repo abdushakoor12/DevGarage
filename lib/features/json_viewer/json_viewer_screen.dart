@@ -1,6 +1,8 @@
+import 'package:arborio/tree_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:shadcn_ui/shadcn_ui.dart' hide TreeView;
 
 class JsonViewerScreen extends StatefulWidget {
   const JsonViewerScreen({super.key});
@@ -10,12 +12,12 @@ class JsonViewerScreen extends StatefulWidget {
 }
 
 class _JsonViewerScreenState extends State<JsonViewerScreen> {
-  late final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller =
+      TextEditingController(text: kDebugMode ? _testJson : "");
 
-  // should be jsonObject or jsonArray
   JsonValue? rootValue;
 
-  void _convert() {
+  void _convert({bool rebuild = true}) {
     try {
       final parsed = jsonValueDecode(_controller.text);
       if (parsed is JsonObject || parsed is JsonArray) {
@@ -23,10 +25,11 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       } else {
         rootValue = null;
       }
-      setState(() {});
+
+      if (mounted) setState(() {});
     } catch (e) {
       rootValue = null;
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
 
@@ -71,16 +74,44 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
               width: double.infinity,
               child: rootValue == null
                   ? const Center(child: Text('No JSON'))
-                  : SingleChildScrollView(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _JsonViewerView(rootValue: rootValue!),
-                          ],
-                        ),
+                  : TreeView(
+                      nodes: _getTree(rootValue!),
+                      animationDuration: const Duration(milliseconds: 300),
+                      expanderBuilder: (context, isExpanded, animation) =>
+                          RotationTransition(
+                        turns: animation,
+                        child: const Icon(Icons.arrow_right),
                       ),
+                      builder: (BuildContext context,
+                          TreeNode<JsonValueKeyPair> node,
+                          bool isSelected,
+                          Animation<double> expansionAnimation,
+                          void Function(TreeNode<JsonValueKeyPair>) select) {
+                        return RichText(
+                          text: TextSpan(
+                            style: DefaultTextStyle.of(context).style,
+                            children: [
+                              TextSpan(
+                                text: node.data.key,
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(text: '<'),
+                              TextSpan(
+                                text: node.data.value.valueType,
+                                style: TextStyle(color: Colors.green),
+                              ),
+                              TextSpan(text: '>'),
+                              TextSpan(text: ' : '),
+                              TextSpan(
+                                text: node.data.value.getKeyValue(),
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
             ),
           ),
@@ -88,122 +119,52 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
       ),
     );
   }
-}
 
-class _JsonViewerView extends StatefulWidget {
-  final JsonValue rootValue;
+  List<TreeNode<JsonValueKeyPair>> _getTree(JsonValue jsonValue) {
+    final List<TreeNode<JsonValueKeyPair>> nodes =
+        <TreeNode<JsonValueKeyPair>>[];
+    if (jsonValue is JsonObject || jsonValue is JsonArray) {
+      nodes.addAll(
+        getNodes(jsonValue),
+      );
+    }
 
-  const _JsonViewerView({required this.rootValue});
-
-  @override
-  State<_JsonViewerView> createState() => _JsonViewerViewState();
-}
-
-class _JsonViewerViewState extends State<_JsonViewerView> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    assert(widget.rootValue is JsonObject || widget.rootValue is JsonArray);
-    final value = widget.rootValue;
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (value is JsonObject)
-            for (var key in value.fields)
-              _JsonValueView(
-                jsonValue: widget.rootValue.getValue(key),
-                name: key,
-              ),
-          if (value is JsonArray)
-            for (var i = 0; i < value.arrayValue!.length; i++)
-              _JsonValueView(
-                jsonValue: widget.rootValue.arrayValue![i],
-                name: i.toString(),
-              ),
-        ],
-      ),
-    );
+    return nodes;
   }
 }
 
-class _JsonValueView extends StatefulWidget {
-  final JsonValue jsonValue;
-  final String name;
+List<TreeNode<JsonValueKeyPair>> getNodes(JsonValue jsonValue) {
+  assert(jsonValue is JsonObject || jsonValue is JsonArray);
 
-  const _JsonValueView({required this.jsonValue, required this.name});
+  final List<TreeNode<JsonValueKeyPair>> nodes = [];
 
-  @override
-  State<_JsonValueView> createState() => _JsonValueViewState();
-}
+  if (jsonValue is JsonObject) {
+    for (final key in jsonValue.fields) {
+      final value = jsonValue.getValue(key);
 
-class _JsonValueViewState extends State<_JsonValueView> {
-  bool expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-            onTap: () {
-              setState(() {
-                if (widget.jsonValue is JsonObject ||
-                    widget.jsonValue is JsonArray) {
-                  expanded = !expanded;
-                }
-              });
-            },
-            child: RichText(
-              text: TextSpan(
-                style: DefaultTextStyle.of(context).style,
-                children: [
-                  TextSpan(
-                    text: widget.name,
-                    style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: '<'),
-                  TextSpan(
-                    text: widget.jsonValue.valueType,
-                    style: TextStyle(color: Colors.green),
-                  ),
-                  TextSpan(text: '>'),
-                  TextSpan(text: ' : '),
-                  TextSpan(
-                    text: widget.jsonValue.getKeyValue(),
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ],
-              ),
-            )),
-        if (expanded && widget.jsonValue is JsonObject)
-          for (var key in widget.jsonValue.objectValue!.fields)
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: _JsonValueView(
-                jsonValue: widget.jsonValue.objectValue!.getValue(key),
-                name: key,
-              ),
-            ),
-        if (expanded && widget.jsonValue is JsonArray)
-          for (var i = 0; i < widget.jsonValue.arrayValue!.length; i++)
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: _JsonValueView(
-                jsonValue: widget.jsonValue.arrayValue![i],
-                name: i.toString(),
-              ),
-            ),
-      ],
-    );
+      nodes.add(TreeNode(
+        Key(key),
+        (key: key, value: value),
+        value is JsonObject || value is JsonArray ? getNodes(value) : null,
+      ));
+    }
   }
+
+  if (jsonValue is JsonArray) {
+    for (var i = 0; i < jsonValue.arrayValue!.length; i++) {
+      final value = jsonValue.arrayValue![i];
+
+      nodes.add(TreeNode(
+          Key(i.toString()),
+          (key: i.toString(), value: jsonValue.arrayValue![i]),
+          value is JsonObject || value is JsonArray ? getNodes(value) : null));
+    }
+  }
+
+  return nodes;
 }
+
+typedef JsonValueKeyPair = ({String key, JsonValue value});
 
 extension JsonValueExtensions on JsonValue {
   String get valueType => _getValueType(this);

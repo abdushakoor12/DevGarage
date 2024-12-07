@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:signals/signals_flutter.dart';
 
 class PasswordGeneratorScreen extends StatefulWidget {
   const PasswordGeneratorScreen({super.key});
@@ -15,30 +16,21 @@ class PasswordGeneratorScreen extends StatefulWidget {
 const kMinPasswordLength = 8;
 const kMaxPasswordLength = 64;
 
-class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
-  int length = 10;
+class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen>
+    with SignalsMixin {
+  late final length = createSignal(10);
+  late final useUpperCase = createSignal(true);
+  late final useLowerCase = createSignal(true);
+  late final useNumber = createSignal(true);
+  late final useSpecialCharacter = createSignal(true);
 
-  bool useUpperCase = true;
-  bool useLowerCase = true;
-  bool useNumber = true;
-  bool useSpecialCharacter = true;
-
-  String password = "";
-
-  @override
-  void initState() {
-    _setPassword();
-
-    super.initState();
-  }
-
-  void _setPassword() => password = _generatePassword(
-        length: length,
-        useUpperCase: useUpperCase,
-        useLowerCase: useLowerCase,
-        useNumber: useNumber,
-        useSpecialCharacter: useSpecialCharacter,
-      );
+  late final password = createComputed(() => _generatePassword(
+        length: length.value,
+        useUpperCase: useUpperCase.value,
+        useLowerCase: useLowerCase.value,
+        useNumber: useNumber.value,
+        useSpecialCharacter: useSpecialCharacter.value,
+      ));
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +47,7 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
-                  title: SelectableText(password,
+                  title: SelectableText(password.value,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -68,15 +60,13 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        Clipboard.setData(ClipboardData(text: password));
+                        Clipboard.setData(ClipboardData(text: password.value));
                       },
                       icon: const Icon(Icons.copy),
                     ),
                     IconButton(
                       onPressed: () {
-                        setState(() {
-                          _setPassword();
-                        });
+                        password.recompute();
                       },
                       icon: const Icon(Icons.refresh),
                     ),
@@ -88,14 +78,11 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
                     Text(kMinPasswordLength.toString()),
                     Expanded(
                       child: ShadSlider(
-                        initialValue: length.toDouble(),
+                        initialValue: length.value.toDouble(),
                         min: kMinPasswordLength.toDouble(),
                         max: kMaxPasswordLength.toDouble(),
                         onChanged: (value) {
-                          setState(() {
-                            length = value.round();
-                            _setPassword();
-                          });
+                          length.value = value.round();
                         },
                       ),
                     ),
@@ -104,32 +91,23 @@ class _PasswordGeneratorScreenState extends State<PasswordGeneratorScreen> {
                 ),
                 const SizedBox(height: 16),
                 ShadSwitch(
-                  value: useUpperCase,
+                  value: useUpperCase.value,
                   onChanged: (value) {
-                    setState(() {
-                      useUpperCase = value;
-                      _setPassword();
-                    });
+                    useUpperCase.value = value;
                   },
                   label: Text("Use Uppercase Letters"),
                 ),
                 ShadSwitch(
-                  value: useNumber,
+                  value: useNumber.value,
                   onChanged: (value) {
-                    setState(() {
-                      useNumber = value;
-                      _setPassword();
-                    });
+                    useNumber.value = value;
                   },
                   label: Text("Use Numbers"),
                 ),
                 ShadSwitch(
-                  value: useSpecialCharacter,
+                  value: useSpecialCharacter.value,
                   onChanged: (value) {
-                    setState(() {
-                      useSpecialCharacter = value;
-                      _setPassword();
-                    });
+                    useSpecialCharacter.value = value;
                   },
                   label: Text("Use Special Characters"),
                 ),

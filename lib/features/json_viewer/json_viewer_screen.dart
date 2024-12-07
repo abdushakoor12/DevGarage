@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
 import 'package:shadcn_ui/shadcn_ui.dart' hide TreeView;
+import 'package:signals/signals_flutter.dart';
 
 class JsonViewerScreen extends StatefulWidget {
   const JsonViewerScreen({super.key});
@@ -11,36 +12,24 @@ class JsonViewerScreen extends StatefulWidget {
   State<JsonViewerScreen> createState() => _JsonViewerScreenState();
 }
 
-class _JsonViewerScreenState extends State<JsonViewerScreen> {
+class _JsonViewerScreenState extends State<JsonViewerScreen> with SignalsMixin {
   late final TextEditingController _controller =
       TextEditingController(text: kDebugMode ? _testJson : "");
 
-  JsonValue? rootValue;
+  late final textEditingValue = _controller.toSignal();
 
-  void _convert({bool rebuild = true}) {
+  late final Computed<JsonValue?> rootValue = createComputed(() {
     try {
-      final parsed = jsonValueDecode(_controller.text);
+      final parsed = jsonValueDecode(textEditingValue.value.text);
       if (parsed is JsonObject || parsed is JsonArray) {
-        rootValue = parsed;
+        return parsed;
       } else {
-        rootValue = null;
+        return null;
       }
-
-      if (mounted) setState(() {});
     } catch (e) {
-      rootValue = null;
-      if (mounted) setState(() {});
+      return null;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _convert();
-
-    _controller.addListener(_convert);
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +61,10 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> {
             child: SizedBox(
               height: double.infinity,
               width: double.infinity,
-              child: rootValue == null
+              child: rootValue.value == null
                   ? const Center(child: Text('No JSON'))
                   : TreeView(
-                      nodes: _getTree(rootValue!),
+                      nodes: _getTree(rootValue.value!),
                       animationDuration: const Duration(milliseconds: 300),
                       expanderBuilder: (context, isExpanded, animation) =>
                           RotationTransition(

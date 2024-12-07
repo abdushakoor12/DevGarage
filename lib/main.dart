@@ -6,7 +6,6 @@ import 'package:dev_garage/core/theme_notifier.dart';
 import 'package:dev_garage/features/home_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,11 +15,7 @@ import 'features/passwod_generator/password_generator_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  if (kIsWeb) {
-    usePathUrlStrategy();
-  }
-
+  
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final locator = Locator();
   locator.add<ThemeNotifier>(() => ThemeNotifier(prefs));

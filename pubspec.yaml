@@ -15,8 +15,8 @@ dependencies:
   jayse: ^0.0.5-beta
   shared_preferences: ^2.3.3
   beamer: ^1.7.0
+  arborio: ^0.3.0-beta
   signals: ^6.0.2
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

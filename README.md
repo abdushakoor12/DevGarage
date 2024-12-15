@@ -1,18 +1,20 @@
-# Dev Garage
+# 🛠️ Dev Garage
 
-Utility tools
+🔗 [Click here to view](https://abdushakoor12.github.io/DevGarage/)
 
-### Stack
+🧰 A collection of handy utility tools
 
-- Design => Shadcn [Flutter Shadcn UI](https://flutter-shadcn-ui.mariuti.com/).
-- Navigation => Beamer [Beamer](https://pub.dev/packages/beamer)
+### 🏗️ Stack
 
-### Platforms
+- 🎨 Design => Shadcn [Flutter Shadcn UI](https://flutter-shadcn-ui.mariuti.com/)
+- 🧭 Navigation => Beamer [Beamer](https://pub.dev/packages/beamer)
 
-Designed for desktop
+### 💻 Platforms
 
-### Features
+Designed for desktop 🖥️
 
-- Password Generator
-- Json Viewer
-- More to come....
+### ✨ Features
+
+- 🔐 Password Generator
+- 🔍 JSON Viewer
+- 🚀 More exciting tools coming soon!

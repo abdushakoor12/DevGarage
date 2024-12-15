@@ -26,10 +26,10 @@ packages:
     dependency: "direct main"
     description:
       name: arborio
-      sha256: a2971bde10c302a9caeff56e9393c616157ae03a4948a76843fad37cc50cb4e0
+      sha256: ce81008f6611944b1cdd991fe19410ab009b419e8c1109902b268d364a998cf0
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0-beta"
+    version: "1.0.1"
   args:
     dependency: transitive
     description:
@@ -268,10 +268,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_svg
-      sha256: "936d9c1c010d3e234d1672574636f3352b4941ca3decaddd3cafaeb9ad49c471"
+      sha256: "54900a1a1243f3c4a5506d853a2b5c2dbc38d5f27e52a52618a8054401431123"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.15"
+    version: "2.0.16"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -342,10 +342,10 @@ packages:
     dependency: transitive
     description:
       name: io
-      sha256: "2ec25704aba361659e10e3e5f5d672068d332fc8ac516421d483a11e5cbd061e"
+      sha256: dfd5a80599cf0165756e3181807ed3e77daf6dd4137caaad72d0b7931597650b
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   jayse:
     dependency: "direct main"
     description:
@@ -414,10 +414,10 @@ packages:
     dependency: transitive
     description:
       name: lucide_icons_flutter
-      sha256: fcdca2fc189693c35f5fb9bd9bbdb6916dae54a2662bf6d0b9edde20fd0d5596
+      sha256: eb8910814ece9165f94c8af8da3971dbdd0862e04e3f5678083c4177ca96bb78
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.4"
+    version: "1.2.5"
   macros:
     dependency: transitive
     description:
@@ -462,10 +462,10 @@ packages:
     dependency: transitive
     description:
       name: package_config
-      sha256: "1c5b77ccc91e4823a5af61ee74e6b972db1ef98c2ff5a18d3161c982a55448bd"
+      sha256: "92d4488434b520a62570293fbd33bb556c7d49230791c1b4bbd973baf6d2dc67"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   path:
     dependency: transitive
     description:
@@ -550,10 +550,10 @@ packages:
     dependency: transitive
     description:
       name: pub_semver
-      sha256: "40d3ab1bbd474c4c2328c91e3a7df8c6dd629b79ece4c4bd04bee496a224fb0c"
+      sha256: "7b3cfbf654f3edd0c6298ecd5be782ce997ddf0e00531b9464b55245185bbbbd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   pubspec_parse:
     dependency: transitive
     description:
@@ -566,10 +566,10 @@ packages:
     dependency: "direct main"
     description:
       name: shadcn_ui
-      sha256: "0734925d997427974fe813de0ec0512a6095b3ac212ff1b865c8d663ea1e0351"
+      sha256: "7cf9c07c8557069f85f8151fd7f3bcf22b5bf889360817e27c704159aff90a73"
       url: "https://pub.dev"
     source: hosted
-    version: "0.15.4"
+    version: "0.16.3"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -582,18 +582,18 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "3b9febd815c9ca29c9e3520d50ec32f49157711e143b7a4ca039eb87e8ade5ab"
+      sha256: "02a7d8a9ef346c9af715811b01fbd8e27845ad2c41148eefd31321471b41863d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.3"
+    version: "2.4.0"
   shared_preferences_foundation:
     dependency: transitive
     description:
       name: shared_preferences_foundation
-      sha256: "07e050c7cd39bad516f8d64c455f04508d09df104be326d8c02551590a0d513d"
+      sha256: "6a52cfcdaeac77cad8c97b539ff688ccfc458c007b4db12be584fbe5c0e49e03"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.3"
+    version: "2.5.4"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -731,10 +731,10 @@ packages:
     dependency: transitive
     description:
       name: timing
-      sha256: "70a3b636575d4163c477e6de42f247a23b315ae20e86442bebe32d3cabf61c32"
+      sha256: "62ee18aca144e4a9f29d212f5a4c6a053be252b895ab14b5821996cff4ed90fe"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   two_dimensional_scrollables:
     dependency: transitive
     description:

@@ -65,12 +65,13 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> with SignalsMixin {
                   ? const Center(child: Text('No JSON'))
                   : TreeView(
                       nodes: _getTree(rootValue.value!),
-                      animationDuration: const Duration(milliseconds: 300),
+                      animationDuration: const Duration(milliseconds: 200),
                       expanderBuilder: (context, isExpanded, animation) =>
                           RotationTransition(
                         turns: animation,
                         child: const Icon(Icons.arrow_right),
                       ),
+                      indentation: SizedBox(width: 8),
                       builder: (BuildContext context,
                           TreeNode<JsonValueKeyPair> node,
                           bool isSelected,
@@ -160,8 +161,10 @@ extension JsonValueExtensions on JsonValue {
 
   String getKeyValue() {
     return switch (this) {
-      JsonObject() => "{...}",
-      JsonArray() => "[...]",
+      (final JsonObject jsonObject) =>
+        "{${jsonObject.fields.isEmpty ? "empty" : "${jsonObject.fields.length}"}}",
+      (final JsonArray jsonArray) =>
+        "[${jsonArray.arrayValue!.isEmpty ? "empty" : "${jsonArray.arrayValue!.length}"}]",
       _ => toString(),
     };
   }

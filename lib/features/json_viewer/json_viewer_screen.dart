@@ -2,6 +2,7 @@ import 'package:arborio/tree_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jayse/jayse.dart';
+import 'package:jayse/parser.dart';
 import 'package:shadcn_ui/shadcn_ui.dart' hide TreeView;
 import 'package:signals/signals_flutter.dart';
 
@@ -15,8 +16,10 @@ class JsonViewerScreen extends StatefulWidget {
 class _JsonViewerScreenState extends State<JsonViewerScreen> with SignalsMixin {
   late final TextEditingController _controller =
       TextEditingController(text: kDebugMode ? _testJson : "");
+  late final TextEditingController _pathController = TextEditingController();
 
   late final textEditingValue = _controller.toSignal();
+  late final pathEditingValue = _pathController.toSignal();
 
   late final Computed<JsonValue?> rootValue = createComputed(() {
     try {
@@ -31,11 +34,53 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> with SignalsMixin {
     }
   });
 
+  late final filteredJsonValue = createComputed(() {
+    final rootValue = this.rootValue.value;
+    if (rootValue == null) {
+      return null;
+    } else {
+      try {
+        final parsed = parseJsonPath(pathEditingValue.value.text, rootValue);
+        return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+  });
+
+  late final Computed<List<TreeNode<JsonValueKeyPair>>> jsonTree = createComputed(
+    () {
+      final jsonValue = filteredJsonValue.value ?? rootValue.value;
+      if (jsonValue == null) {
+        return [];
+      }
+
+      return _getTree(jsonValue);
+    },
+  );
+
   @override
   Widget build(BuildContext context) {
+    final invalidPath = pathEditingValue.value.text.trim().isNotEmpty &&
+        filteredJsonValue.value == null;
+        final border = invalidPath
+                    ? ShadBorder.all(color: ShadTheme.of(context).colorScheme.destructive)
+                    : null;
     return Scaffold(
       appBar: AppBar(
-        actions: [],
+        actions: [
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 200),
+            child: ShadInput(
+              controller: _pathController,
+              decoration: ShadDecoration(
+                border: border,
+                
+              ),
+              placeholder: Text('Search path e.g. \$.books'),
+            ),
+          )
+        ],
       ),
       body: ShadResizablePanelGroup(
         children: [
@@ -61,10 +106,10 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> with SignalsMixin {
             child: SizedBox(
               height: double.infinity,
               width: double.infinity,
-              child: rootValue.value == null
+              child: jsonTree.value.isEmpty
                   ? const Center(child: Text('No JSON'))
                   : TreeView(
-                      nodes: _getTree(rootValue.value!),
+                      nodes: jsonTree.value,
                       animationDuration: const Duration(milliseconds: 200),
                       expanderBuilder: (context, isExpanded, animation) =>
                           RotationTransition(
@@ -116,6 +161,13 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> with SignalsMixin {
     if (jsonValue is JsonObject || jsonValue is JsonArray) {
       nodes.addAll(
         getNodes(jsonValue),
+      );
+    } else {
+      nodes.add(
+        TreeNode(
+          Key(jsonValue.getKeyValue()),
+          (key: jsonValue.getKeyValue(), value: jsonValue),
+        ),
       );
     }
 

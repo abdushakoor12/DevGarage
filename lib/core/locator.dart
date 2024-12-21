@@ -16,11 +16,12 @@ class Locator {
       return _services[T] as T;
     }
 
-    throw Exception('Service $T not found, available service ${_services.keys}');
+    throw Exception(
+        'Service $T not found, available service ${_services.keys}');
   }
 
   void override<T>(Function() lazyService) {
-    if(_services.containsKey(T)) {
+    if (_services.containsKey(T)) {
       _services.remove(T);
     }
 

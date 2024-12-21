@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:arborio/tree_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,8 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> with SignalsMixin {
     }
   });
 
-  late final Computed<List<TreeNode<JsonValueKeyPair>>> jsonTree = createComputed(
+  late final Computed<List<TreeNode<JsonValueKeyPair>>> jsonTree =
+      createComputed(
     () {
       final jsonValue = filteredJsonValue.value ?? rootValue.value;
       if (jsonValue == null) {
@@ -63,11 +66,28 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> with SignalsMixin {
   Widget build(BuildContext context) {
     final invalidPath = pathEditingValue.value.text.trim().isNotEmpty &&
         filteredJsonValue.value == null;
-        final border = invalidPath
-                    ? ShadBorder.all(color: ShadTheme.of(context).colorScheme.destructive)
-                    : null;
+    final border = invalidPath
+        ? ShadBorder.all(color: ShadTheme.of(context).colorScheme.destructive)
+        : null;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (rootValue.value != null)
+              ShadButton(
+                icon: const Icon(Icons.format_indent_increase),
+                child: Text("Format"),
+                onPressed: () {
+                  JsonEncoder encoder = JsonEncoder.withIndent('  ');
+                  setState(() {
+                    _controller.text = encoder.convert(rootValue.value);
+                  });
+                },
+              )
+          ],
+        ),
         actions: [
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 200),
@@ -75,7 +95,6 @@ class _JsonViewerScreenState extends State<JsonViewerScreen> with SignalsMixin {
               controller: _pathController,
               decoration: ShadDecoration(
                 border: border,
-                
               ),
               placeholder: Text('Search path e.g. \$.books'),
             ),

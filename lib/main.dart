@@ -14,7 +14,7 @@ import 'features/passwod_generator/password_generator_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final locator = Locator();
   locator.add<ThemeNotifier>(() => ThemeNotifier(prefs));

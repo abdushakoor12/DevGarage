@@ -70,6 +70,15 @@ class HomeScreen extends StatelessWidget {
                 description: Text("Generate passwords"),
               ),
             ),
+            InkWell(
+              onTap: () {
+                context.beamToNamed('/hashing');
+              },
+              child: ShadCard(
+                title: Text("Hashing"),
+                description: Text("Generate hashes like MD5 SHA-256"),
+              ),
+            ),
           ],
         ),
       ),

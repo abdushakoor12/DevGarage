@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:beamer/beamer.dart';
 import 'package:dev_garage/core/locator_root.dart';
 import 'package:dev_garage/core/theme_notifier.dart';
+import 'package:dev_garage/features/hashing/hashing_screen.dart';
 import 'package:dev_garage/features/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -48,6 +49,10 @@ class _MyAppState extends State<MyApp> {
         '/password_generator': (context, state, data) => BeamPage(
               title: 'Password Generator',
               child: PasswordGeneratorScreen(),
+            ),
+        "/hashing": (context, state, data) => BeamPage(
+              title: "Hashing",
+              child: HashingScreen(),
             ),
       },
     ).call,
